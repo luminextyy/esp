@@ -1,43 +1,102 @@
---Made By WRD
---[[ Configuration ]]--
+loadstring(game:HttpGet("https://pastebin.com/raw/ygp8Enye"))()
 
---If true, 
-	--Players on the same team will not be aimed at
-	--Will not work in games with custom team systems
---If false,
-	--All players in the game will be aimed at
-    _G.WRDAimbotTeamCheck = false
+local Camera = workspace.CurrentCamera
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local LocalPlayer = Players.LocalPlayer
+local Holding = false
 
-    --If true, 
-        --Simulates mouse movement. Its as if you actually moved your mouse onto the player, meaning this is harder to detect
-        --Tradeoff is it comes with a lot of bugs. Lacks smoothness, not 100% accurate, and can't aim at players dirrectly behind.
-    --If false, 
-        --Will use camera manipulation. 
-        --This is the smoothest and most accurate, but games can detect this easy. Be careful with what games you use false in.
-        --May be buggy for 3rd person games!
-    _G.WRDAimbotBypass = false
-    
-    --If true, the aimbot will only look for the closest visible player
-        --Buggy for 3rd person games!
-        --May cause heavy lag
-    --If false, the aimbot will look for all players, even if they're behind a wall
-    _G.WRDAimBotWallcheck = false
-    
-    --[[ 
-    
-    Additional Notes | August 17, 2019
-    
-    *This was made for exploits using the WeAreDevs API, such as JJSploit.
-    *Please don't steal credits. I worked pretty hard on this ;c
-    *This should be able to work in all games using default Roblox character systems. Games using using custom/modified characters may be buggy, such as Strucid and Phantom Forces.
-    *You don't need to rexecute the entire script to change configuration above. You could simply execute the desired configuration line.
-    *Rexecuting the script should not cause issues
-    *The WRDAimbotBypass enabled bug involving players behind you will be fixed eventually. Be sure to check the website time to time!
-    *Aimbot starts when you hold the right mouse button
-    *This aimbot snaps aims to the closest player's head.
-    *Please change the configuration below appropriately.
-    *Check the website occasionally for updates!
-    
-    ]]--
-    
- loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/WRD Aimbot.txt"))
+_G.AimbotEnabled = true
+_G.TeamCheck = true -- If set to true then the script would only lock your aim at enemy team members.
+_G.AimPart = "Head" -- Where the aimbot script would lock at.
+_G.Sensitivity = 0 -- How many seconds it takes for the aimbot script to officially lock onto the target's aimpart.
+
+_G.CircleSides = 128 -- How many sides the FOV circle would have.
+_G.CircleColor = Color3.fromRGB(255, 255, 255) -- (RGB) Color that the FOV circle would appear as.
+_G.CircleTransparency = 0.7 -- Transparency of the circle.
+_G.CircleRadius = 200 -- The radius of the circle / FOV.
+_G.CircleFilled = false -- Determines whether or not the circle is filled.
+_G.CircleVisible = true -- Determines whether or not the circle is visible.
+_G.CircleThickness = 0 -- The thickness of the circle.
+
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+FOVCircle.Radius = _G.CircleRadius
+FOVCircle.Filled = _G.CircleFilled
+FOVCircle.Color = _G.CircleColor
+FOVCircle.Visible = _G.CircleVisible
+FOVCircle.Radius = _G.CircleRadius
+FOVCircle.Transparency = _G.CircleTransparency
+FOVCircle.NumSides = _G.CircleSides
+FOVCircle.Thickness = _G.CircleThickness
+
+local function GetClosestPlayer()
+	local MaximumDistance = _G.CircleRadius
+	local Target = nil
+
+	for _, v in next, Players:GetPlayers() do
+		if v.Name ~= LocalPlayer.Name then
+			if _G.TeamCheck == true then
+				if v.Team ~= LocalPlayer.Team then
+					if v.Character ~= nil then
+						if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+							if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
+								local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
+								local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
+								
+								if VectorDistance < MaximumDistance then
+									Target = v
+								end
+							end
+						end
+					end
+				end
+			else
+				if v.Character ~= nil then
+					if v.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+						if v.Character:FindFirstChild("Humanoid") ~= nil and v.Character:FindFirstChild("Humanoid").Health ~= 0 then
+							local ScreenPoint = Camera:WorldToScreenPoint(v.Character:WaitForChild("HumanoidRootPart", math.huge).Position)
+							local VectorDistance = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(ScreenPoint.X, ScreenPoint.Y)).Magnitude
+							
+							if VectorDistance < MaximumDistance then
+								Target = v
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+	return Target
+end
+
+UserInputService.InputBegan:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+        Holding = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+        Holding = false
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    FOVCircle.Position = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+    FOVCircle.Radius = _G.CircleRadius
+    FOVCircle.Filled = _G.CircleFilled
+    FOVCircle.Color = _G.CircleColor
+    FOVCircle.Visible = _G.CircleVisible
+    FOVCircle.Radius = _G.CircleRadius
+    FOVCircle.Transparency = _G.CircleTransparency
+    FOVCircle.NumSides = _G.CircleSides
+    FOVCircle.Thickness = _G.CircleThickness
+
+    if Holding == true and _G.AimbotEnabled == true then
+        TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, GetClosestPlayer().Character[_G.AimPart].Position)}):Play()
+    end
+end)
