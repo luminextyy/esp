@@ -27,50 +27,11 @@ Universal:AddButton({
 	end
 })
 
--- Evade Scripts
-if game.placeId == 9872472334 then
-
-	local Evade = Window:MakeTab({
-		Name = "Evade"
-	})
-
-	Evade:AddButton({
-		Name = "Tbao Hub",
-		Callback = function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/orn8/rblx-scripts/main/Evade/TbaoHub.lua"))()
-		end
-	})
-
-end
-
--- Item Asylum Scripts
-if game.placeId == 5670218884 then
-
-	local ItemAsylum = Window:MakeTab({
-		Name = "Item Asylum"
-	})
-
-	ItemAsylum:AddButton({
-		Name = "JasonA#7368's Script",
-		Callback = function()
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/orn8/rblx-scripts/main/Item%20Asylum/JasonA7368.lua'))()
-		end
-	})
-
-	ItemAsylum:AddButton({
-		Name = "Item Asylum Haxx",
-		Callback = function()
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/orn8/rblx-scripts/main/Item%20Asylum/ItemAsylumHaxx.lua'))()
-		end
-	})
-
-	ItemAsylum:AddButton({
-		Name = "not fair hub",
-		Callback = function()
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/orn8/rblx-scripts/main/Item%20Asylum/notfairhub.lua'))()
-		end
-	})
-
-end
+Universal:AddButton({
+	Name = "AimBot",
+	Callback = function()
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/luminextyy/esp/main/aimbot.lua'))()
+	end
+})
 
 OrionLib:Init()
