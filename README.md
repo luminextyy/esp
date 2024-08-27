@@ -1,6 +1,6 @@
 ```lua
 -- All-in-one script:
-loadstring(game:HttpGet('https://raw.githubusercontent.com/luminexty/bloxscript-esp/main/main.lua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/luminextyy/esp/main/main.lua'))()
 ```
 <br/>
 
