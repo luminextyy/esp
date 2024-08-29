@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "rblx-scripts", IntroText = "rblx-scripts", HidePremium = false, SaveConfig = false})
+local Window = OrionLib:MakeWindow({Name = "Blox Script", IntroText = "Blox Script", HidePremium = false, SaveConfig = false})
 
 -- Universal Scripts
 local Universal = Window:MakeTab({
